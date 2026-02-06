@@ -3,14 +3,32 @@ package fa.dfa;
 import fa.FAInterface;
 import fa.State;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class DFA implements DFAInterface {
 
+    //Different State Types
+    enum StateType {
+        START,
+        INTERMEDIATE,
+        FINAL
+    }
+
+    //Storing States
+    Map<String, StateType> StateMap = new HashMap<String, StateType>();
+
     @Override
     public boolean addState(String name) {
-        // TODO: implement
-        return false;
+        if (StateMap.containsKey(name)) {
+            return false;
+        }
+
+        //Default State Type Is Intermediate
+        StateMap.put(name, StateType.INTERMEDIATE);
+        return true;
     }
 
     @Override
