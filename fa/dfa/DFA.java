@@ -20,6 +20,9 @@ public class DFA implements DFAInterface {
     //Storing States
     Map<String, StateType> StateMap = new HashMap<String, StateType>();
 
+    //Storing Sigma
+    HashSet<Character> Sigma = new HashSet<>();
+
     @Override
     public boolean addState(String name) {
         if (StateMap.containsKey(name)) {
@@ -33,19 +36,30 @@ public class DFA implements DFAInterface {
 
     @Override
     public boolean setFinal(String name) {
-        // TODO: implement
+
+        //If State Is Found It Will Be Updated To Final
+        if (StateMap.containsKey(name)) {
+            StateMap.put(name, StateType.FINAL);
+            return true;
+        }
+
         return false;
     }
 
     @Override
     public boolean setStart(String name) {
-        // TODO: implement
+
+        //If State Is Found It Will Be Updated To Start
+        if (StateMap.containsKey(name)) {
+            StateMap.put(name, StateType.START);
+            return true;
+        }
         return false;
     }
 
     @Override
     public void addSigma(char symbol) {
-        // TODO: implement
+        Sigma.add(symbol);
     }
 
     @Override
@@ -56,13 +70,23 @@ public class DFA implements DFAInterface {
 
     @Override
     public Set<Character> getSigma() {
-        // TODO: implement
+
+        //If Sigma Contains Elements Then Return Alphabet
+        if (!Sigma.isEmpty()){
+            return Sigma;
+        }
+
         return null;
     }
 
     @Override
     public State getState(String name) {
-        // TODO: implement
+
+        //If State Exists Then Return State
+//        if (StateMap.containsKey(name)) {
+//            StateType State = StateMap.get(name);
+//            return State;
+//        }
         return null;
     }
 
