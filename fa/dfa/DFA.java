@@ -1,46 +1,51 @@
 package fa.dfa;
 
-import fa.FAInterface;
 import fa.State;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class DFA implements DFAInterface {
 
-    //Different State Types
-    enum StateType {
-        START,
-        INTERMEDIATE,
-        FINAL
-    }
-
     //Storing States
-    Map<String, StateType> StateMap = new HashMap<String, StateType>();
+    final private Set<State> states;
+    final private Set<Character> sigma;
+    private State startState;
+    final private Set<State> finalStates;
 
-    //Storing Sigma
-    HashSet<Character> Sigma = new HashSet<>();
+    public DFA() {
+        states = new HashSet<State>();
+        sigma = new HashSet<>();
+        startState = null;
+        finalStates = new HashSet<State>();
+
+    }
 
     @Override
     public boolean addState(String name) {
-        if (StateMap.containsKey(name)) {
-            return false;
+
+        //Verify It Doesnt Already Exist
+        for (State s : states){
+            if (s.getName().equals(name)){
+                return false;
+            }
         }
 
-        //Default State Type Is Intermediate
-        StateMap.put(name, StateType.INTERMEDIATE);
+        //Add New State
+        states.add(new DFAState(name));
         return true;
     }
 
     @Override
     public boolean setFinal(String name) {
 
-        //If State Is Found It Will Be Updated To Final
-        if (StateMap.containsKey(name)) {
-            StateMap.put(name, StateType.FINAL);
-            return true;
+        //Verify State Exists
+        for (State s : states){
+            if (s.getName().equals(name)){
+                //Set End State
+                finalStates.add(s);
+                return true;
+            }
         }
 
         return false;
@@ -49,17 +54,21 @@ public class DFA implements DFAInterface {
     @Override
     public boolean setStart(String name) {
 
-        //If State Is Found It Will Be Updated To Start
-        if (StateMap.containsKey(name)) {
-            StateMap.put(name, StateType.START);
-            return true;
+        //Verify State Exists
+        for (State s : states){
+            if (s.getName().equals(name)){
+                //Set Start State
+                startState = s;
+                return true;
+            }
         }
+
         return false;
     }
 
     @Override
     public void addSigma(char symbol) {
-        Sigma.add(symbol);
+        sigma.add(symbol);
     }
 
     @Override
@@ -71,22 +80,12 @@ public class DFA implements DFAInterface {
     @Override
     public Set<Character> getSigma() {
 
-        //If Sigma Contains Elements Then Return Alphabet
-        if (!Sigma.isEmpty()){
-            return Sigma;
-        }
-
-        return null;
+        return sigma;
     }
 
     @Override
     public State getState(String name) {
-
-        //If State Exists Then Return State
-//        if (StateMap.containsKey(name)) {
-//            StateType State = StateMap.get(name);
-//            return State;
-//        }
+        // TODO: implement
         return null;
     }
 
