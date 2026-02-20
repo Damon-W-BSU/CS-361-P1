@@ -1,11 +1,10 @@
 package fa.dfa;
 
 import fa.State;
-
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Map;
+import java.util.Set;
 
 public class DFA implements DFAInterface {
 
@@ -14,17 +13,17 @@ public class DFA implements DFAInterface {
     final private Set<Character> sigma;
     private State startState;
     final private Set<State> finalStates;
-    private Map<State, Map<Character, State>> transitions;
+    final private Map<State, Map<Character, State>> transitions;
 
-    public DFA() {
-        states = new HashSet<State>();
+    public DFA() { // Alex
+        states = new HashSet<>();
         sigma = new HashSet<>();
         startState = null;
-        finalStates = new HashSet<State>();
+        finalStates = new HashSet<>();
         transitions = new HashMap<>();
     }
 
-    @Override
+    @Override // Alex
     public boolean addState(String name) {
 
         //Verify It Doesnt Already Exist
@@ -42,7 +41,7 @@ public class DFA implements DFAInterface {
         return true;
     }
 
-    @Override
+    @Override // Alex
     public boolean setFinal(String name) {
 
         //Verify State Exists
@@ -57,7 +56,7 @@ public class DFA implements DFAInterface {
         return false;
     }
 
-    @Override
+    @Override // Alex
     public boolean setStart(String name) {
 
         //Verify State Exists
@@ -72,15 +71,45 @@ public class DFA implements DFAInterface {
         return false;
     }
 
-    @Override
+    @Override // Alex
     public void addSigma(char symbol) {
         sigma.add(symbol);
     }
 
-    @Override
+    @Override // Damon
     public boolean accepts(String s) {
-        // TODO: implement
-        return false;
+
+        // begin at start state
+        State currentState = startState;
+
+        for (int i = 0; i < s.length() - 1; i++) {
+
+            char currentChar = s.charAt(i);
+
+            // checks for valid char
+            if (!sigma.contains(currentChar)) {
+                return false;
+            }
+
+            // find transition for current char
+            Map <Character, State> stateTransitions = transitions.get(currentState);
+            if (stateTransitions == null) {
+                return false;
+            }
+            State nextState = stateTransitions.get(currentChar);
+
+            // check for valid transition
+            if (nextState != null) {
+                currentState = nextState;
+            } else {
+                return false;
+            }
+
+        }
+
+        // check for final state>
+        return finalStates.contains(currentState);
+
     }
 
     @Override
@@ -102,16 +131,20 @@ public class DFA implements DFAInterface {
         return null;
     }
 
-    @Override
+    @Override // Damon
     public boolean isFinal(String name) {
-        // TODO: implement
-        return false;
+
+        State s =  new DFAState(name);
+        return finalStates.contains(s);
+
     }
 
-    @Override
+    @Override // Damon
     public boolean isStart(String name) {
-        // TODO: implement
-        return false;
+
+        State s = new DFAState(name);
+        return startState.getName().equals(s.getName());
+
     }
 
     //AI Used HERE
@@ -132,15 +165,46 @@ public class DFA implements DFAInterface {
         return true;
     }
 
-    @Override
+    @Override // Damon
     public DFA swap(char symb1, char symb2) {
         // TODO: implement
         return null;
     }
 
-    @Override
+    @Override // Damon
     public String toString() {
-        // TODO: implement
-        return null;
+
+        StringBuilder sb = new StringBuilder();
+
+        // print states
+        sb.append("Q = { ");
+        for (State s : states) {
+            sb.append(s.getName());
+            sb.append(" ");
+        }
+        sb.append("}\n");
+
+        // print alphabet
+        sb.append("Sigma = { ");
+        for (char c : sigma) {
+            sb.append(c);
+            sb.append(" ");
+        }
+        sb.append("}\n");
+
+        // TODO print delta 
+
+        // print start state and final states
+        sb.append("q0 = ");
+        sb.append(startState.getName());
+        sb.append("\nF = { ");
+        for (State s : finalStates) {
+            sb.append(s.getName());
+            sb.append(" ");
+        }
+        sb.append("}\n");
+        return sb.toString();
+
+
     }
 }
