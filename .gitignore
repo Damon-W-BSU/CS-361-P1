@@ -1,1 +1,4 @@
-"./Main.java"
+# for running tests locally
+Main.java
+*.jar
+lib/
