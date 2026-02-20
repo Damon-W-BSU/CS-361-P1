@@ -30,6 +30,26 @@ public class DFAState extends fa.State {
     }
 
     /**
+     * swaps the transitions of two chars
+     * in the DFAState
+     * 
+     * @param symb1
+     * @param symb2
+     * @return
+     */
+    public boolean swapTransition(char symb1, char symb2) {
+
+        if (!(transitions.containsKey(symb1) && transitions.containsKey(symb2))) {
+            return false;
+        }
+
+        DFAState temp = transitionFor(symb1);
+        transitions.replace(symb1, transitions.get(symb2));
+        transitions.replace(symb2, temp);
+        return true;
+    }
+
+    /**
      * returns the transition for
      * the onSymb char, or NULL
      * if one doesn't exist
@@ -47,12 +67,12 @@ public class DFAState extends fa.State {
         StringBuilder sb = new StringBuilder();
         sb.append(getName());
 
-        transitions.forEach(((onSymb, state) -> {
+        transitions.forEach((onSymb, state) -> {
 
-            String next = "\t" + onSymb + " " + state.getName() + "\n";
+            String next = " " + onSymb + " " + state.getName() + "\n";
             sb.append(next);
 
-        }));
+        });
 
         return sb.toString();
     }

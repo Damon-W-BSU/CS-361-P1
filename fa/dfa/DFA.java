@@ -163,7 +163,11 @@ public class DFA implements DFAInterface {
         if (!sigma.contains(onSymb)) return false;
 
         Map<Character, DFAState> stateTransitions = transitions.get(from);
-        if (stateTransitions.containsKey(onSymb)) return false;
+
+        // if (stateTransitions.containsKey(onSymb)) return false;
+        // ^ needed to check whether a valid transition already exists
+
+        if (stateTransitions.containsKey(onSymb) && stateTransitions.get(onSymb) != to) return false;
 
         // track transition on state
         from.addTransition(onSymb, to);
@@ -173,8 +177,26 @@ public class DFA implements DFAInterface {
 
     @Override // Damon
     public DFA swap(char symb1, char symb2) {
-        // TODO: implement
-        return null;
+
+        DFA newDFA = new DFA();
+        for (char c : sigma) {newDFA.addSigma(c);}
+        for (DFAState s : states) {newDFA.addState(s.getName());}
+        for (DFAState s : finalStates) {newDFA.setFinal(s.getName());}
+        newDFA.setStart(startState.getName());
+
+        transitions.forEach((state, map) -> {
+            map.forEach((symb, dest) -> {
+                newDFA.addTransition(state.getName(), dest.getName(), symb);
+            });
+        });
+
+        for (DFAState s : newDFA.states) {
+            if (!s.swapTransition(symb1, symb2)) {
+                return null;
+            }
+        }
+
+        return newDFA;
     }
 
     @Override // Damon
