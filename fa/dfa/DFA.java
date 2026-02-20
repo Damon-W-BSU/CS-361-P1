@@ -2,9 +2,10 @@ package fa.dfa;
 
 import fa.State;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DFA implements DFAInterface {
 
@@ -16,10 +17,10 @@ public class DFA implements DFAInterface {
     final private Map<State, Map<Character, DFAState>> transitions;
 
     public DFA() { // Alex
-        states = new HashSet<>();
-        sigma = new HashSet<>();
+        states = new LinkedHashSet<>();
+        sigma = new LinkedHashSet<>();
         startState = null;
-        finalStates = new HashSet<>();
+        finalStates = new LinkedHashSet<>();
         transitions = new HashMap<>();
     }
 
@@ -182,39 +183,38 @@ public class DFA implements DFAInterface {
         StringBuilder sb = new StringBuilder();
 
         // print states
-        sb.append("Q = { ");
-        for (State s : states) {
-            sb.append(s.getName());
-            sb.append(" ");
-        }
+        sb.append("Q = {");
+        // AI used for following line combining set elements
+        sb.append(states.stream().map(State::getName).collect(Collectors.joining(" ")));
         sb.append("}\n");
+
 
         // print alphabet
-        sb.append("Sigma = { ");
-        for (char c : sigma) {
-            sb.append(c);
-            sb.append(" ");
-        }
+        sb.append("Sigma = {");
+        sb.append(sigma.stream().map(String::valueOf).collect(Collectors.joining(" ")));
         sb.append("}\n");
 
-        // TODO print delta
-        sb.append("Delta = \n\t \t\n");
-
-        for (State s : states) {
-
-            
+        // print delta
+        sb.append("delta = \n ");
+        for (char c : sigma) {
+            sb.append("\t").append(c);
+        }
+        sb.append("\n");
+        for (DFAState s : states) {
+            sb.append(s.getName());
+            for (char c : sigma) {
+                sb.append("\t").append(s.transitionFor(c).getName());
+            }
+            sb.append("\n");
         }
 
         // print start state and final states
-        sb.append("q0 = ");
-        sb.append(startState.getName());
-        sb.append("\nF = { ");
-        for (State s : finalStates) {
-            sb.append(s.getName());
-            sb.append(" ");
-        }
+        sb.append("q0 = ").append(startState.getName()).append("\n");
+        sb.append("F = {");
+        sb.append(finalStates.stream().map(State::getName).collect(Collectors.joining(" ")));
         sb.append("}\n");
         return sb.toString();
+
 
 
     }
