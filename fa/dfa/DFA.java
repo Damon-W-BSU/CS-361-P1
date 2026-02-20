@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Damon Wargo, Alex Ramirez-Robles
+ */
 public class DFA implements DFAInterface {
 
     //Storing States
@@ -16,7 +19,7 @@ public class DFA implements DFAInterface {
     final private Set<DFAState> finalStates;
     final private Map<State, Map<Character, DFAState>> transitions;
 
-    public DFA() { // Alex
+    public DFA() {
         states = new LinkedHashSet<>();
         sigma = new LinkedHashSet<>();
         startState = null;
@@ -24,7 +27,7 @@ public class DFA implements DFAInterface {
         transitions = new HashMap<>();
     }
 
-    @Override // Alex
+    @Override
     public boolean addState(String name) {
 
         //Verify It Doesnt Already Exist
@@ -42,7 +45,7 @@ public class DFA implements DFAInterface {
         return true;
     }
 
-    @Override // Alex
+    @Override
     public boolean setFinal(String name) {
 
         //Verify State Exists
@@ -57,7 +60,7 @@ public class DFA implements DFAInterface {
         return false;
     }
 
-    @Override // Alex
+    @Override 
     public boolean setStart(String name) {
 
         //Verify State Exists
@@ -72,23 +75,24 @@ public class DFA implements DFAInterface {
         return false;
     }
 
-    @Override // Alex
+    @Override 
     public void addSigma(char symbol) {
         sigma.add(symbol);
     }
 
-    @Override // Damon
+    @Override 
     public boolean accepts(String s) {
 
         // begin at start state
         DFAState currentState = startState;
         DFAState next;
 
+        // iterate through and validate string
         for (int i = 0; i < s.length(); i++) {
 
             char currentChar = s.charAt(i);
 
-            // checks for valid char
+            // check for valid char
             if (!sigma.contains(currentChar)) {
                 return false;
             }
@@ -102,14 +106,13 @@ public class DFA implements DFAInterface {
 
         }
 
-        // check for final state>
+        // check for final state
         return finalStates.contains(currentState);
 
     }
 
     @Override
     public Set<Character> getSigma() {
-
         return sigma;
     }
 
@@ -126,11 +129,12 @@ public class DFA implements DFAInterface {
         return null;
     }
 
-    @Override // Damon
+    @Override
     public boolean isFinal(String name) {
 
-        for (DFAState s : states) {
-            if (s.getName().equals(name) && finalStates.contains(s)) {
+        // search final states
+        for (DFAState s : finalStates) {
+            if (s.getName().equals(name)) {
                 return true;
             }
         }
@@ -139,17 +143,9 @@ public class DFA implements DFAInterface {
 
     }
 
-    @Override // Damon
+    @Override
     public boolean isStart(String name) {
-
-        for (DFAState s : states) {
-            if (s.getName().equals(name) && startState == s) {
-                return true;
-            }
-        }
-
-        return false;
-
+        return startState.getName().equals(name);
     }
 
     //AI Used HERE
@@ -162,11 +158,8 @@ public class DFA implements DFAInterface {
         if (from == null || to == null) return false;
         if (!sigma.contains(onSymb)) return false;
 
+        // check whether transition already exists
         Map<Character, DFAState> stateTransitions = transitions.get(from);
-
-        // if (stateTransitions.containsKey(onSymb)) return false;
-        // ^ needed to check whether a valid transition already exists
-
         if (stateTransitions.containsKey(onSymb) && stateTransitions.get(onSymb) != to) return false;
 
         // track transition on state
@@ -175,21 +168,24 @@ public class DFA implements DFAInterface {
         return true;
     }
 
-    @Override // Damon
+    @Override
     public DFA swap(char symb1, char symb2) {
 
+        // copy values to new dfa
         DFA newDFA = new DFA();
         for (char c : sigma) {newDFA.addSigma(c);}
         for (DFAState s : states) {newDFA.addState(s.getName());}
         for (DFAState s : finalStates) {newDFA.setFinal(s.getName());}
         newDFA.setStart(startState.getName());
 
+        // copy transitions to new dfa
         transitions.forEach((state, map) -> {
             map.forEach((symb, dest) -> {
                 newDFA.addTransition(state.getName(), dest.getName(), symb);
             });
         });
 
+        // swap transition for each state
         for (DFAState s : newDFA.states) {
             if (!s.swapTransition(symb1, symb2)) {
                 return null;
@@ -199,7 +195,7 @@ public class DFA implements DFAInterface {
         return newDFA;
     }
 
-    @Override // Damon
+    @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();

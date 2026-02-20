@@ -3,6 +3,9 @@ package fa.dfa;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Damon Wargo, Alex Ramirez-Robles
+ */
 public class DFAState extends fa.State {
 
     final private Map<Character, DFAState> transitions;
@@ -19,7 +22,7 @@ public class DFAState extends fa.State {
      * @param onSymb 
      * @return true if new transition added
      */
-    public boolean addTransition(char onSymb, DFAState nextState) {
+    protected boolean addTransition(char onSymb, DFAState nextState) {
 
         if (transitions.containsKey(onSymb)) {
             return false;
@@ -37,7 +40,7 @@ public class DFAState extends fa.State {
      * @param symb2
      * @return
      */
-    public boolean swapTransition(char symb1, char symb2) {
+    protected boolean swapTransition(char symb1, char symb2) {
 
         if (!(transitions.containsKey(symb1) && transitions.containsKey(symb2))) {
             return false;
@@ -57,7 +60,7 @@ public class DFAState extends fa.State {
      * @param onSymb
      * @return 
      */
-    public DFAState transitionFor(char onSymb) {
+    protected DFAState transitionFor(char onSymb) {
         return transitions.get(onSymb);
     }
 
