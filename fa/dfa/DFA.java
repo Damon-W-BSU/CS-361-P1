@@ -9,11 +9,11 @@ import java.util.Set;
 public class DFA implements DFAInterface {
 
     //Storing States
-    final private Set<State> states;
+    final private Set<DFAState> states;
     final private Set<Character> sigma;
-    private State startState;
-    final private Set<State> finalStates;
-    final private Map<State, Map<Character, State>> transitions;
+    private DFAState startState;
+    final private Set<DFAState> finalStates;
+    final private Map<State, Map<Character, DFAState>> transitions;
 
     public DFA() { // Alex
         states = new HashSet<>();
@@ -34,7 +34,7 @@ public class DFA implements DFAInterface {
         }
 
         //Add New State
-        State newState = new DFAState(name);
+        DFAState newState = new DFAState(name);
         states.add(newState);
         //Add Transition
         transitions.put(newState, new HashMap<>());
@@ -45,7 +45,7 @@ public class DFA implements DFAInterface {
     public boolean setFinal(String name) {
 
         //Verify State Exists
-        for (State s : states){
+        for (DFAState s : states){
             if (s.getName().equals(name)){
                 //Set End State
                 finalStates.add(s);
@@ -60,7 +60,7 @@ public class DFA implements DFAInterface {
     public boolean setStart(String name) {
 
         //Verify State Exists
-        for (State s : states){
+        for (DFAState s : states){
             if (s.getName().equals(name)){
                 //Set Start State
                 startState = s;
@@ -80,9 +80,10 @@ public class DFA implements DFAInterface {
     public boolean accepts(String s) {
 
         // begin at start state
-        State currentState = startState;
+        DFAState currentState = startState;
+        DFAState next;
 
-        for (int i = 0; i < s.length() - 1; i++) {
+        for (int i = 0; i < s.length(); i++) {
 
             char currentChar = s.charAt(i);
 
@@ -91,19 +92,12 @@ public class DFA implements DFAInterface {
                 return false;
             }
 
-            // find transition for current char
-            Map <Character, State> stateTransitions = transitions.get(currentState);
-            if (stateTransitions == null) {
+            next = currentState.transitionFor(currentChar);
+            if (next == null) {
                 return false;
             }
-            State nextState = stateTransitions.get(currentChar);
 
-            // check for valid transition
-            if (nextState != null) {
-                currentState = nextState;
-            } else {
-                return false;
-            }
+            currentState = next;
 
         }
 
@@ -134,16 +128,26 @@ public class DFA implements DFAInterface {
     @Override // Damon
     public boolean isFinal(String name) {
 
-        State s =  new DFAState(name);
-        return finalStates.contains(s);
+        for (DFAState s : states) {
+            if (s.getName().equals(name) && finalStates.contains(s)) {
+                return true;
+            }
+        }
+
+        return false;
 
     }
 
     @Override // Damon
     public boolean isStart(String name) {
 
-        State s = new DFAState(name);
-        return startState.getName().equals(s.getName());
+        for (DFAState s : states) {
+            if (s.getName().equals(name) && startState == s) {
+                return true;
+            }
+        }
+
+        return false;
 
     }
 
@@ -151,16 +155,17 @@ public class DFA implements DFAInterface {
     @Override
     public boolean addTransition(String fromState, String toState, char onSymb) {
 
-        State from = getState(fromState);
-        State to = getState(toState);
+        DFAState from = (DFAState)getState(fromState);
+        DFAState to = (DFAState)getState(toState);
 
         if (from == null || to == null) return false;
         if (!sigma.contains(onSymb)) return false;
 
-        Map<Character, State> stateTransitions = transitions.get(from);
-
+        Map<Character, DFAState> stateTransitions = transitions.get(from);
         if (stateTransitions.containsKey(onSymb)) return false;
 
+        // track transition on state
+        from.addTransition(onSymb, to);
         stateTransitions.put(onSymb, to);
         return true;
     }
@@ -192,7 +197,13 @@ public class DFA implements DFAInterface {
         }
         sb.append("}\n");
 
-        // TODO print delta 
+        // TODO print delta
+        sb.append("Delta = \n\t \t\n");
+
+        for (State s : states) {
+
+            
+        }
 
         // print start state and final states
         sb.append("q0 = ");
