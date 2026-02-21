@@ -64,6 +64,10 @@ public class DFAState extends fa.State {
         return transitions.get(onSymb);
     }
 
+    /**
+     * Returns a formatted String
+     * of this state
+     */
     @Override
     public String toString(){
 

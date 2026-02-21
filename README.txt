@@ -9,7 +9,7 @@
 OVERVIEW:
 
 
-DFA.java models a Deterministic Finite Automatan
+DFA.java models a Deterministic Finite Automaton
 
 
 INCLUDED FILES:
@@ -30,7 +30,7 @@ org.junit.runner.JUnitCore test.dfa.DFATest
 
 PROGRAM DESIGN AND IMPORTANT CONCEPTS:
 
-DFA.java models a deterministic finite automatan containing a set of 
+DFA.java models a deterministic finite automaton containing a set of
 characters that represent an alphabet, a set of states, and a map
 of the transitions between states. States are tracked using 
 named DFAState objects. 
@@ -87,15 +87,12 @@ within the class. Otherwise I had no major issues.
 
 Alex:
  
-*
-*
-*
-*
-*
-
+I was responsible for DFA.java. I had some troubles understanding the project
+initially as creating the logic was not making any sense to me. Specifically
+getting the transitions with the Map inside the Map.
 
 SOURCES:
 
 Damon: Gemini was used to help format the toString() method for DFA.java
 
-Alex: *
+Alex: I used ChatGPT to help with the addTransition method.

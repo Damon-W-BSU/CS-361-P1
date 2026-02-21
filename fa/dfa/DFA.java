@@ -148,7 +148,6 @@ public class DFA implements DFAInterface {
         return startState.getName().equals(name);
     }
 
-    //AI Used HERE
     @Override
     public boolean addTransition(String fromState, String toState, char onSymb) {
 
