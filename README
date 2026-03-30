@@ -16,7 +16,7 @@ INCLUDED FILES:
 
 * fa.dfa.NFA.java          java source file
 * fa.dfa.NFAState.java     java source file
-* README.txt               this file
+* README                   this file
 
 
 COMPILING AND RUNNING:
@@ -36,44 +36,19 @@ of the transitions between states. States are tracked using
 named NFAState objects.
 
 The start/final/intermediate states, characters, and transitions are all added 
-manually using methods within NFA. Once transitions are in place, the DFA can
+manually using methods within NFA. Once transitions are in place, the NFA can
 read strings using the accepts() method, which will determine whether the string 
-is a valid for that NFA. A string representation of the NFA's 5-tuple can
+is a valid for that NFA. A string representation of the NFAs 5-tuple can
 be viewed with the toString() method. 
-
-It's worth noting that out implementation has transitions tracked both within
-the NFA and in NFAState objects. By storing the possible transitions within the
-DFAState, it was easy to streamline the accepts() and swap() methods.
 
 TESTING:
 
 Aside from the included Junit tests, testing was done locally using mainly
-the toString() methods for NFA and NFAState. Running a local main class with
-a simple NFA was sufficient for the info needed to pass Junit tests.
+the toString() methods for DFA and DFAState. Running a local main class with
+a simple DFA was sufficient for the info needed to pass Junit tests.
 
 example tests looked like:
 
-NFA nfa = new NFA();
-
-        dfa.addSigma('0');
-        dfa.addSigma('1');
-
-        dfa.addState("a");
-        dfa.addState("b");
-
-        dfa.setStart("a");
-        dfa.setFinal("b");
-        
-        dfa.addTransition("a", "b", '1');
-        dfa.addTransition("a", "a", '0');
-        dfa.addTransition("b", "a", '0');
-        dfa.addTransition("b", "b", '1');
-
-        System.out.println(dfa.getState("a").toString());
-        System.out.println(dfa.getState("b").toString());
-        System.out.println();
-        System.out.println(dfa.toString());
-        System.out.println(dfa.swap('0', '1').toString());
 
 DISCUSSION:
  

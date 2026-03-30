@@ -1,6 +1,7 @@
 package fa.nfa;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,13 +23,37 @@ public class NFAState extends fa.State{
      * @param onSymb
      * @return true if new transition added
      */
-    boolean addTransition(char  onSymb, NFAState nextState) {
+    void addTransition(char onSymb, NFAState nextState) {
 
-        if (transitions.containsKey(onSymb)) {
-            return false;
-        }
+        Set<NFAState> stateSet;
+        stateSet = transitions.get(onSymb);
 
-        transitions.put(onSymb, nextState);
-        return true;
+        // instantiate if char not in map
+        if(stateSet == null) {
+            stateSet = new HashSet<>();
+            transitions.put(onSymb, stateSet);
+        } 
+        stateSet.add(nextState);
+    }
+
+    /**
+     * checks for if a transition exists
+     * 
+     * @param onSymb
+     * @return
+     */
+    boolean hasTransition(char onSymb) {
+        return transitions.containsKey(onSymb);
+    }
+
+    /**
+     * retrieces possible transitions for 
+     * this NFA state
+     * 
+     * @param onSymb
+     * @return
+     */
+    Map<Character, Set<NFAState>> getTransitions() {
+        return transitions;
     }
 }
