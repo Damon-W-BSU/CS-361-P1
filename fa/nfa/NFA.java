@@ -15,7 +15,6 @@ public class NFA implements NFAInterface {
     final private Set<Character> sigma;
     private NFAState state;
     final private Set<NFAState> finalStates;
-    final private Map<NFAState, Map<Character, NFAState>> transitions;
 
 
     @Override
