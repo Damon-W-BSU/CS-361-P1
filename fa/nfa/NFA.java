@@ -13,8 +13,15 @@ public class NFA implements NFAInterface {
     //Storing States
     final private Set<NFAState> states;
     final private Set<Character> sigma;
-    private NFAState state;
+    private NFAState startState;
     final private Set<NFAState> finalStates;
+
+    public NFA() {
+        startState = null;
+        states = new HashSet<>();
+        sigma = new HashSet<>();
+        finalStates = new HashSet<>();
+    }
 
 
     @Override
@@ -44,22 +51,54 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean addState(String name) {
-        return false;
+
+        // check if state exists
+        for (State s : states) {
+            if (s.getName().equals(name)) {
+                return false;
+            }
+        }
+        
+        // add new state
+        NFAState newState = new NFAState(name);
+        states.add(newState);
+        return true;
     }
 
     @Override
     public boolean setFinal(String name) {
+
+        // search for state
+        for (NFAState s : states) {
+            if (s.getName().equals(name)) {
+
+                // add to final states
+                finalStates.add(s);
+                return true;
+            }
+        }
+
+        // state doesn't exist
         return false;
     }
 
     @Override
     public boolean setStart(String name) {
+
+        // find state and set to start
+        for (NFAState s : states) {
+            if (s.getName().equals(name)) {
+                startState = s;
+            }
+        }
+
+        // state doesn't exist
         return false;
     }
 
     @Override
     public void addSigma(char symbol) {
-
+        sigma.add(symbol);
     }
 
     @Override
@@ -69,7 +108,7 @@ public class NFA implements NFAInterface {
 
     @Override
     public Set<Character> getSigma() {
-        return Set.of();
+        return sigma;
     }
 
     @Override
