@@ -1,7 +1,7 @@
 ﻿****************
-* Project 1: Deterministic Finite Automata
+* Project 2: Nondeterministic Finite Automata
 * CS 361
-* 2/20/26
+* 3/30/26
 * Damon Wargo, Alex Ramirez-Robles
 **************** 
 
@@ -9,51 +9,51 @@
 OVERVIEW:
 
 
-DFA.java models a Deterministic Finite Automaton
+NFA.java models a Nondeterministic Finite Automaton
 
 
 INCLUDED FILES:
 
-* fa.dfa.DFA.java          java source file
-* fa.dfa.DFAState.java     java source file
+* fa.dfa.NFA.java          java source file
+* fa.dfa.NFAState.java     java source file
 * README.txt               this file
 
 
 COMPILING AND RUNNING:
 
-to compile test.dfa.DFATest on onyx from the top directory:
-$ javac -cp .:/usr/share/java/junit.jar ./test/dfa/DFATest.java
+to compile test.dfa.NFATest on onyx from the top directory:
+$ javac -cp .:/usr/share/java/junit.jar ./test/nfa/NFATest.java
 
-to run test.dfa.DFAtest on onyx:
+to run test.dfa.NFAtest on onyx:
 $ java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/hamcrest.jar
-org.junit.runner.JUnitCore test.dfa.DFATest
+org.junit.runner.JUnitCore test.dfa.NFATest
 
 PROGRAM DESIGN AND IMPORTANT CONCEPTS:
 
-DFA.java models a deterministic finite automaton containing a set of
+NFA.java models a nondeterministic finite automaton containing a set of
 characters that represent an alphabet, a set of states, and a map
 of the transitions between states. States are tracked using 
-named DFAState objects. 
+named NFAState objects.
 
 The start/final/intermediate states, characters, and transitions are all added 
-manually using methods within DFA. Once transitions are in place, the DFA can 
+manually using methods within NFA. Once transitions are in place, the DFA can
 read strings using the accepts() method, which will determine whether the string 
-is a valid for that DFA. A string representation of the DFA's 5-tuple can
+is a valid for that NFA. A string representation of the NFA's 5-tuple can
 be viewed with the toString() method. 
 
 It's worth noting that out implementation has transitions tracked both within
-the DFA and in DFAState objects. By storing the possible transitions within the
+the NFA and in NFAState objects. By storing the possible transitions within the
 DFAState, it was easy to streamline the accepts() and swap() methods.
 
 TESTING:
 
 Aside from the included Junit tests, testing was done locally using mainly
-the toString() methods for DFA and DFAState. Running a local main class with
-a simple DFA was sufficient for the info needed to pass Junit tests. 
+the toString() methods for NFA and NFAState. Running a local main class with
+a simple NFA was sufficient for the info needed to pass Junit tests.
 
 example tests looked like:
 
-DFA dfa = new DFA();
+NFA nfa = new NFA();
 
         dfa.addSigma('0');
         dfa.addSigma('1');
@@ -79,20 +79,11 @@ DISCUSSION:
  
 Damon:
 
-I was responsible for DFAState.java, swap(), accepts(), and toString().
-I had some struggles with tracking transitions between states for the
-accepts() and swap() methods, but I was able to solve my issues by
-storing transition information within DFAStates and writing helper methods
-within the class. Otherwise I had no major issues. 
+
 
 Alex:
  
-I was responsible for DFA.java. I had some troubles understanding the project
-initially as creating the logic was not making any sense to me. Specifically
-getting the transitions with the Map inside the Map.
+
 
 SOURCES:
 
-Damon: Gemini was used to help format the toString() method for DFA.java
-
-Alex: I used ChatGPT to help with the addTransition method.
