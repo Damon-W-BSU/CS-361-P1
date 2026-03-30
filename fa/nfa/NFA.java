@@ -1,11 +1,22 @@
 package fa.nfa;
 
 import fa.State;
+import fa.dfa.DFAState;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class NFA implements NFAInterface {
+
+    //Storing States
+    final private Set<NFAState> states;
+    final private Set<Character> sigma;
+    private NFAState state;
+    final private Set<NFAState> finalStates;
+    final private Map<NFAState, Map<Character, NFAState>> transitions;
+
 
     @Override
     public Set<NFAState> getToState(NFAState from, char onSymb) {
