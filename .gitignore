@@ -2,3 +2,6 @@
 Main.java
 *.jar
 lib/
+.idea/
+out/
+CS-361-P1.iml
