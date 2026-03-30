@@ -35,4 +35,25 @@ public class NFAState extends fa.State{
         } 
         stateSet.add(nextState);
     }
+
+    /**
+     * checks for if a transition exists
+     * 
+     * @param onSymb
+     * @return
+     */
+    boolean hasTransition(char onSymb) {
+        return transitions.containsKey(onSymb);
+    }
+
+    /**
+     * retrieces possible transitions for 
+     * this NFA state
+     * 
+     * @param onSymb
+     * @return
+     */
+    Map<Character, Set<NFAState>> getTransitions() {
+        return transitions;
+    }
 }

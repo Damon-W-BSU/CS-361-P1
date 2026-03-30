@@ -31,7 +31,25 @@ public class NFA implements NFAInterface {
 
     @Override
     public Set<NFAState> eClosure(NFAState s) {
-        return Set.of();
+
+        // retrieve transition map and e transitions
+        Map<Character, Set<NFAState>> transitions = s.getTransitions();
+        Set<NFAState> outStates = transitions.get('e');
+
+        // iterate through each state accessible via e transition
+        for (NFAState state : outStates) {
+
+            // obtain e closure and append to outStates
+            // if no e transitions remain, closure = null
+            Set<NFAState> closure = eClosure(state);
+            if(closure != null) {
+                for(NFAState eTransition : closure) {
+                    outStates.add(eTransition);
+                }
+            }
+        }
+        
+        return outStates;
     }
 
     @Override
@@ -98,7 +116,9 @@ public class NFA implements NFAInterface {
 
     @Override
     public void addSigma(char symbol) {
-        sigma.add(symbol);
+        if (symbol != 'e') {
+            sigma.add(symbol);
+        }
     }
 
     @Override
