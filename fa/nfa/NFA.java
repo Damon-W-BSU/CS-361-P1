@@ -140,9 +140,9 @@ public class NFA implements NFAInterface {
     }
 
     @Override
-    public State getState(String name) {
+    public NFAState getState(String name) {
 
-        for (State s : states) {
+        for (NFAState s : states) {
             if (s.getName().equals(name)) {
                 return s;
             }
