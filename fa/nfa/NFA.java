@@ -24,7 +24,22 @@ public class NFA implements NFAInterface {
 
     @Override
     public Set<NFAState> getToState(NFAState from, char onSymb) {
-        return Set.of();
+
+        if (!states.contains(from)) {
+            throw new IllegalArgumentException("State not found: " + from);
+        }
+
+        //Retrieve Transitions Available From 'from'
+        Map<Character, Set<NFAState>> transitions = from.getTransitions();
+
+        //Retrieve Possible Transitions
+        Set<NFAState> result = transitions.get(onSymb);
+
+        if (result == null) {
+            return Set.of();
+        }
+
+        return result;
     }
 
     @Override
