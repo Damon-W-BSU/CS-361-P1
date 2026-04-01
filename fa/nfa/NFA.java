@@ -5,6 +5,7 @@ import fa.State;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class NFA implements NFAInterface {
 
@@ -45,24 +46,36 @@ public class NFA implements NFAInterface {
     @Override
     public Set<NFAState> eClosure(NFAState s) {
 
-        // retrieve transition map and e transitions
-        Map<Character, Set<NFAState>> transitions = s.getTransitions();
-        Set<NFAState> outStates = transitions.get('e');
+        //State doesnt exist
+        if (!states.contains(s)) {
+            throw new IllegalArgumentException("State not found: " + s);
+        }
 
-        // iterate through each state accessible via e transition
-        for (NFAState state : outStates) {
+        //Instantiate stack
+        Stack<NFAState> stack = new Stack<>();
+        stack.push(s);
 
-            // obtain e closure and append to outStates
-            // if no e transitions remain, closure = null
-            Set<NFAState> closure = eClosure(state);
-            if(closure != null) {
-                for(NFAState eTransition : closure) {
-                    outStates.add(eTransition);
+        //Instantiate eClosure
+        Set<NFAState> result = new HashSet<>();
+
+        Set<NFAState> explored = new HashSet<>();
+        while  (!stack.isEmpty()) {
+
+            NFAState current = stack.pop();
+            result.add(current);
+            explored.add(current);
+
+            //Explore Set Of States Reachable From Current
+            for (NFAState next : getToState(current, 'e')) {
+
+                //Add Unexplored States To The Stack
+                if (!explored.contains(next)) {
+                    stack.push(next);
                 }
             }
+
         }
-        
-        return outStates;
+        return result;
     }
 
     @Override
