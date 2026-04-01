@@ -133,6 +133,13 @@ public class NFA implements NFAInterface {
 
     @Override
     public State getState(String name) {
+
+        for (State s : states) {
+            if (s.getName().equals(name)) {
+                return s;
+            }
+        }
+
         return null;
     }
 
