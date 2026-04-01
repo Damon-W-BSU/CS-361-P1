@@ -123,6 +123,15 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean accepts(String s) {
+
+        if (sigma.isEmpty()) {
+            return false;
+        }
+
+        if (sigma.contains(s)) {
+            return true;
+        }
+
         return false;
     }
 
