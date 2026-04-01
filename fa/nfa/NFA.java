@@ -1,12 +1,11 @@
 package fa.nfa;
 
 import fa.State;
-import fa.dfa.DFAState;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class NFA implements NFAInterface {
 
@@ -26,30 +25,57 @@ public class NFA implements NFAInterface {
 
     @Override
     public Set<NFAState> getToState(NFAState from, char onSymb) {
-        return Set.of();
+
+        if (!states.contains(from)) {
+            throw new IllegalArgumentException("State not found: " + from);
+        }
+
+        //Retrieve Transitions Available From 'from'
+        Map<Character, Set<NFAState>> transitions = from.getTransitions();
+
+        //Retrieve Possible Transitions
+        Set<NFAState> result = transitions.get(onSymb);
+
+        if (result == null) {
+            return Set.of();
+        }
+
+        return result;
     }
 
     @Override
     public Set<NFAState> eClosure(NFAState s) {
 
-        // retrieve transition map and e transitions
-        Map<Character, Set<NFAState>> transitions = s.getTransitions();
-        Set<NFAState> outStates = transitions.get('e');
+        //State doesnt exist
+        if (!states.contains(s)) {
+            throw new IllegalArgumentException("State not found: " + s);
+        }
 
-        // iterate through each state accessible via e transition
-        for (NFAState state : outStates) {
+        //Instantiate stack
+        Stack<NFAState> stack = new Stack<>();
+        stack.push(s);
 
-            // obtain e closure and append to outStates
-            // if no e transitions remain, closure = null
-            Set<NFAState> closure = eClosure(state);
-            if(closure != null) {
-                for(NFAState eTransition : closure) {
-                    outStates.add(eTransition);
+        //Instantiate eClosure
+        Set<NFAState> result = new HashSet<>();
+
+        Set<NFAState> explored = new HashSet<>();
+        while  (!stack.isEmpty()) {
+
+            NFAState current = stack.pop();
+            result.add(current);
+            explored.add(current);
+
+            //Explore Set Of States Reachable From Current
+            for (NFAState next : getToState(current, 'e')) {
+
+                //Add Unexplored States To The Stack
+                if (!explored.contains(next)) {
+                    stack.push(next);
                 }
             }
+
         }
-        
-        return outStates;
+        return result;
     }
 
     @Override
@@ -59,7 +85,44 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
-        return false;
+
+        //If character doesn't exist in alphabet
+        if (!sigma.contains(onSymb) && onSymb != 'e') {
+            return false;
+        }
+
+        NFAState fState = null;
+
+        //Get fromState
+        for (NFAState state : states) {
+            if (state.getName().equals(fromState)) {
+                fState = state;
+                break;
+            }
+        }
+        if (fState == null) {
+            return false;
+        }
+
+        //Search For State Name In states
+        for (String name : toStates) {
+
+            NFAState to = null;
+            for (NFAState s : states) {
+                if (s.getName().equals(name)) {
+                    to = s;
+                    break;
+                }
+            }
+            if (to == null) {
+                return false;
+            }
+
+            // Add the transition
+            fState.addTransition(onSymb, to);
+        }
+
+        return true;
     }
 
     @Override
@@ -107,6 +170,7 @@ public class NFA implements NFAInterface {
         for (NFAState s : states) {
             if (s.getName().equals(name)) {
                 startState = s;
+                return true;
             }
         }
 
@@ -123,6 +187,26 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean accepts(String s) {
+
+        //Memory
+        Set<NFAState> eClosure = new HashSet<>();
+        Set<NFAState> charClosure = new HashSet<>();
+
+        //Step 1: Read The String?
+        for (char c  : s.toCharArray()) {
+            if (!sigma.contains(c)) {
+                return false;
+            }
+
+            //Getting All epsilon transitions from start
+            eClosure = eClosure(startState);
+
+            //Getting All char transitions from start
+            charClosure = getToState(startState, c);
+
+
+        }
+
         return false;
     }
 
@@ -132,17 +216,40 @@ public class NFA implements NFAInterface {
     }
 
     @Override
-    public State getState(String name) {
+    public NFAState getState(String name) {
+
+        for (NFAState s : states) {
+            if (s.getName().equals(name)) {
+                return s;
+            }
+        }
+
         return null;
     }
 
     @Override
     public boolean isFinal(String name) {
+
+        //Loop Through
+        for (NFAState s : finalStates) {
+            if (name.equals(s.getName())) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     @Override
     public boolean isStart(String name) {
+
+        if (startState == null) {
+            return false;
+        }
+
+        if (name.equals(startState.getName())) {
+            return true;
+        }
         return false;
     }
 }
