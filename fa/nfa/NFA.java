@@ -1,7 +1,7 @@
 package fa.nfa;
 
 import fa.State;
-import fa.dfa.DFAState;
+import fa.nfa.NFAState;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -143,6 +143,10 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean isStart(String name) {
+
+        if (name.equals(startState.getName())) {
+            return true;
+        }
         return false;
     }
 }
