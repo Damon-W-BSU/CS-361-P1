@@ -57,7 +57,44 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
-        return false;
+
+        //If character doesn't exist in alphabet
+        if (!sigma.contains(onSymb) && onSymb != 'e') {
+            return false;
+        }
+
+        NFAState fState = null;
+
+        //Get fromState
+        for (NFAState state : states) {
+            if (state.getName().equals(fromState)) {
+                fState = state;
+                break;
+            }
+        }
+        if (fState == null) {
+            return false;
+        }
+
+        //Search For State Name In states
+        for (String name : toStates) {
+
+            NFAState to = null;
+            for (NFAState s : states) {
+                if (s.getName().equals(name)) {
+                    to = s;
+                    break;
+                }
+            }
+            if (to == null) {
+                return false;
+            }
+
+            // Add the transition
+            fState.addTransition(onSymb, to);
+        }
+
+        return true;
     }
 
     @Override
