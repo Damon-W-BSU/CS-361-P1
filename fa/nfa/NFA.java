@@ -138,11 +138,23 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean isFinal(String name) {
+
+        //Loop Through
+        for (NFAState s : finalStates) {
+            if (name.equals(s.getName())) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     @Override
     public boolean isStart(String name) {
+
+        if (startState == null) {
+            return false;
+        }
 
         if (name.equals(startState.getName())) {
             return true;
