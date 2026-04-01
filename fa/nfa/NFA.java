@@ -188,12 +188,23 @@ public class NFA implements NFAInterface {
     @Override
     public boolean accepts(String s) {
 
-        if (sigma.isEmpty()) {
-            return false;
-        }
+        //Memory
+        Set<NFAState> eClosure = new HashSet<>();
+        Set<NFAState> charClosure = new HashSet<>();
 
-        if (sigma.contains(s)) {
-            return true;
+        //Step 1: Read The String?
+        for (char c  : s.toCharArray()) {
+            if (!sigma.contains(c)) {
+                return false;
+            }
+
+            //Getting All epsilon transitions from start
+            eClosure = eClosure(startState);
+
+            //Getting All char transitions from start
+            charClosure = getToState(startState, c);
+
+
         }
 
         return false;
