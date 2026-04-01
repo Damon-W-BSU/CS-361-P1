@@ -1,9 +1,7 @@
 package fa.nfa;
 
 import fa.State;
-import fa.nfa.NFAState;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -107,6 +105,7 @@ public class NFA implements NFAInterface {
         for (NFAState s : states) {
             if (s.getName().equals(name)) {
                 startState = s;
+                return true;
             }
         }
 
