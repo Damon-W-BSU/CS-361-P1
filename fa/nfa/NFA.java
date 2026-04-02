@@ -80,7 +80,44 @@ public class NFA implements NFAInterface {
 
     @Override
     public int maxCopies(String s) {
-        return 0;
+
+        if (startState == null) {
+            return 0;
+        }
+
+        //Memory
+        int maxBranches = 0;
+
+        //Get All Epsilon Transition States
+        Set<NFAState> currentStates = eClosure(startState);
+
+        maxBranches = currentStates.size();
+
+        //Process String
+        for (char c : s.toCharArray()) {
+            //Check For Invalid Char
+            if (!sigma.contains(c)) {
+                return maxBranches;
+            }
+
+            Set<NFAState> nextStates = new HashSet<>();
+            for (NFAState state : currentStates) {
+                Set<NFAState> toStates = getToState(state, c);
+                nextStates.addAll(toStates);
+            }
+
+            Set<NFAState> newCurrent = new HashSet<>();
+            for (NFAState state : nextStates) {
+                Set<NFAState> eStates = eClosure(state);
+                newCurrent.addAll(eStates);
+            }
+
+            currentStates = newCurrent;
+
+            maxBranches = Math.max(maxBranches, currentStates.size());
+        }
+
+        return maxBranches;
     }
 
     @Override
@@ -188,23 +225,43 @@ public class NFA implements NFAInterface {
     @Override
     public boolean accepts(String s) {
 
-        //Memory
-        Set<NFAState> eClosure = new HashSet<>();
-        Set<NFAState> charClosure = new HashSet<>();
+        //Make Sure There Is A Start State
+        if (startState == null) {
+            return false;
+        }
 
-        //Step 1: Read The String?
+        //Get Epsilon Transitions From Start State
+        Set<NFAState> currentStates = eClosure(startState);
+
+        //Read The String
         for (char c  : s.toCharArray()) {
             if (!sigma.contains(c)) {
                 return false;
             }
 
-            //Getting All epsilon transitions from start
-            eClosure = eClosure(startState);
+            Set<NFAState> nextStates = new HashSet<>();
 
-            //Getting All char transitions from start
-            charClosure = getToState(startState, c);
+            //Get States available from currentStates
+            for (NFAState next : currentStates) {
+                Set<NFAState> toStates = getToState(next, c);
+                nextStates.addAll(toStates);
 
+            }
 
+            //Add New Epsilon Transitions
+            Set<NFAState> newCurrent = new HashSet<>();
+            for (NFAState next : nextStates) {
+                newCurrent.addAll(eClosure(next));
+            }
+
+            //Update Set of Sets
+            currentStates = newCurrent;
+        }
+
+        for (NFAState state : currentStates) {
+            if (isFinal(state.getName())) {
+                return true;
+            }
         }
 
         return false;
