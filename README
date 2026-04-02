@@ -22,9 +22,11 @@ INCLUDED FILES:
 COMPILING AND RUNNING:
 
 to compile test.dfa.NFATest on onyx from the top directory:
+
 $ javac -cp .:/usr/share/java/junit.jar ./test/nfa/NFATest.java
 
 to run test.dfa.NFAtest on onyx:
+
 $ java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/hamcrest.jar
 org.junit.runner.JUnitCore test.dfa.NFATest
 
@@ -38,23 +40,24 @@ named NFAState objects.
 The start/final/intermediate states, characters, and transitions are all added 
 manually using methods within NFA. Once transitions are in place, the NFA can
 read strings using the accepts() method, which will determine whether the string 
-is a valid for that NFA. A string representation of the NFAs 5-tuple can
-be viewed with the toString() method. 
+is a valid for that NFA.
 
 TESTING:
 
-Aside from the included Junit tests, testing was done locally using mainly
-the toString() methods for NFA and NFAState. Running a local main class with
-a simple NFA was sufficient for the info needed to pass Junit tests.
-
-example tests looked like:
+We used the Junit test feedback as the main resource for testing our program. Based
+on which tests passed and failed, we could determine what functions had bugs we needed
+to fix. Given more time available on our end, we would have liked to write a toString()
+method and accomplish more thourough testing via that. 
 
 
 DISCUSSION:
  
 Damon:
-
-
+I was responsible for setting up the project and the first chunk of NFA.java and 
+NFAState.java, so my progress was pretty straightforward once I was able to get
+going on this project. My main struggles mainly came from having not used Java much
+recently, which meant jumping into a fully OOP mindset and a lot of syntax headache.
+Otherwise, I found this to be a pretty straightforward extension of the DFA assignment. 
 
 Alex:
 When entering development I ran into a lot of problems mis-creating objects as NFAState objects.
@@ -67,3 +70,7 @@ SOURCES:
 Alex: 
 - I used ChatGPT to help me create the pseudocode and debug the two following methods: accepts() and maxCopies().               
 - man-pages
+
+Damon:
+- Gemini was used as essentially a StackOverflow replacement when I had questions about Java.
+None of the code contributed from me was written by AI.
