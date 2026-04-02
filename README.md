@@ -1,7 +1,7 @@
 ﻿****************
 * Project 2: Nondeterministic Finite Automata
 * CS 361
-* 3/30/26
+* 4/01/26
 * Damon Wargo, Alex Ramirez-Robles
 **************** 
 
@@ -16,7 +16,7 @@ INCLUDED FILES:
 
 * fa.dfa.NFA.java          java source file
 * fa.dfa.NFAState.java     java source file
-* README                   this file
+* README.md                this file
 
 
 COMPILING AND RUNNING:
@@ -44,8 +44,8 @@ be viewed with the toString() method.
 TESTING:
 
 Aside from the included Junit tests, testing was done locally using mainly
-the toString() methods for DFA and DFAState. Running a local main class with
-a simple DFA was sufficient for the info needed to pass Junit tests.
+the toString() methods for NFA and NFAState. Running a local main class with
+a simple NFA was sufficient for the info needed to pass Junit tests.
 
 example tests looked like:
 
@@ -57,8 +57,13 @@ Damon:
 
 
 Alex:
- 
-
+When entering development I ran into a lot of problems mis-creating objects as NFAState objects.
+It wasn't detrimental but it frequently. I had trouble remembering how Sets work so looking at
+its built-in methods happened alot. I had trouble remembering how for-each loops work. And keeping
+track of all the different sets for each set of states was also a hardship.
 
 SOURCES:
 
+Alex: 
+I used ChatGPT to help me create the psuedo-code and debug
+the two following methods: accepts() and maxCopies().
