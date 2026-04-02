@@ -65,5 +65,5 @@ track of all the different sets for each set of states was also a hardship.
 SOURCES:
 
 Alex: 
-I used ChatGPT to help me create the psuedo-code and debug
-the two following methods: accepts() and maxCopies().
+- I used ChatGPT to help me create the pseudocode and debug the two following methods: accepts() and maxCopies().               
+- man-pages
